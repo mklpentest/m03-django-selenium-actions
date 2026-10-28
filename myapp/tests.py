@@ -1,3 +1,6 @@
+from typing import ClassVar
+from django.urls import reverse
+
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.firefox.options import Options
@@ -6,7 +9,9 @@ from selenium.webdriver.common.by import By
 
 class MySeleniumTests(StaticLiveServerTestCase):
     # Carregar una base de dades de test
-    # fixtures = ['testdb.json',]
+    fixtures: ClassVar[list[str]] = [
+        "testdb.json",
+    ]
 
     @classmethod
     def setUpClass(cls):
@@ -22,7 +27,7 @@ class MySeleniumTests(StaticLiveServerTestCase):
 
     def test_login(self):
         # Anar a la pàgina de login
-        self.selenium.get("%s%s" % (self.live_server_url, "admin/login"))
+        self.selenium.get(self.live_server_url + reverse("admin:login"))
         # Comprova el títol
         self.assertEqual(self.selenium.title, "Log in | Django site admin")
         # Introduim dades de login i fem click al botó login
